@@ -1,0 +1,143 @@
+#!/usr/bin/env python
+
+from sqlalchemy import create_engine
+
+#Prompt user to log into database 
+
+usersUsername = (raw_input("Your username is "))
+usersPassword = (raw_input("Your password is "))
+
+#Connect to database
+connectDatabase = {
+    'userName': usersUsername,    # The name of the MySQL account to use
+    'password': usersPassword,    # The password for the MySQL account
+    'serverName': "localhost",    # The name of the computer running MySQL
+    'portNumber': 3306,           # The port of the MySQL server (default is 3306)
+    'dbName': "music_project",    # The name of the database
+}
+
+conn = create_engine('mysql://{0[userName]}:{0[password]}@{0[serverName]}:{0[portNumber]}/{0[dbName]}'.format(connectDatabase))
+import MySQLdb
+db = MySQLdb.connect(host = "localhost", port= 3306, 
+	user= usersUsername, passwd= usersPassword, db="music_project")
+
+print 'Connected to database'
+
+usersVariable = (raw_input("Would you like a random playlist: "))
+
+#ensure the user input the correct name, otherwise prompt them for a new
+if usersVariable in ['y', 'Y', 'yes', 'YES', 'Yes']:
+	print "Great! We will generate your random playlist:"
+elif usersVariable in ['n', 'N', 'NO', 'No', 'no']:
+	print "Okay. Have a nice day."
+else: 
+	usersVariable = raw_input("You did not enter a valid response. Please respond Y or N:")
+
+
+cursor = db.cursor()
+query = ("update playlists set sname=(select sname from songs ORDER BY RAND() LIMIT 1) where playlists.pname='Song1'")
+cursor.execute(query)
+query2 = ("update playlists set sname=(select sname from songs ORDER BY RAND() LIMIT 1) where playlists.pname='Song2'")
+cursor.execute(query2)
+query3 =("update playlists set sname=(select sname from songs ORDER BY RAND() LIMIT 1) where playlists.pname='Song3'")
+cursor.execute(query3)
+query4 = ("update playlists set sname=(select sname from songs ORDER BY RAND() LIMIT 1) where playlists.pname='Song4'")
+cursor.execute(query4)
+query5 = ("update playlists set sname=(select sname from songs ORDER BY RAND() LIMIT 1) where playlists.pname='Song5'")
+cursor.execute(query5)
+
+queryDisplay = ("SELECT playlists.pname, playlists.sname, songs.artistsname, artistsAlbum.albumname FROM playlists, songs, artistsAlbum Where playlists.sname=songs.sname AND songs.artistsname = artistsAlbum.artistsname ORDER BY playlists.pname")
+
+cursor.execute(queryDisplay)
+result = cursor.fetchall()
+print result
+
+usersResponse = (raw_input("Is this playlist okay? "))
+if usersResponse in ['y', 'Y', 'yes', 'YES', 'Yes']:
+	print "Enjoy your playlist!"
+elif usersResponse in ['n', 'N', 'NO', 'No', 'no']:
+	usersPlaylistResponse = (raw_input("Would you like to delete a song from the playlist or replace a song with a new random song?"))
+	if usersPlaylistResponse in ['Change', 'change', 'Replace', 'replace']:
+		userChange = (raw_input("What number song would you like to change? "))
+		userDelete = "skip"
+	elif usersPlaylistResponse in ['Delete', 'delete']:
+		userDelete = (raw_input("What number song would you like to be deleted? "))
+		userChange = "skip"
+	else: usersPlaylistResponse = (raw_input("You did not enter a valid response. Please respond change or delete: "))
+else:
+	usersResponse = (raw_input("You did not enter a valid response. Please respond Y or N: "))
+
+if userChange in ['1', 'First', 'Song1', 'song1', 'one']:
+	query1Change = ("update playlists set sname=(select sname from songs ORDER BY RAND() LIMIT 1) where playlists.pname='Song1'")
+	cursor.execute(query1Change)
+	cursor.execute(queryDisplay)
+	result = cursor.fetchall()
+	print result
+	usersResponse = (raw_input("Is this playlist okay? "))
+elif userChange in ['2', 'Second', 'Song2', 'Song2', 'two']:
+	query2Change = ("update playlists set sname=(select sname from songs ORDER BY RAND() LIMIT 1) where playlists.pname='Song2'")
+	cursor.execute(query2Change)
+	cursor.execute(queryDisplay)
+	result = cursor.fetchall()
+	print result
+elif userChange in ['3', 'Third', 'Song3', 'song3', 'three']:
+	query3Change = ("update playlists set sname=(select sname from songs ORDER BY RAND() LIMIT 1) where playlists.pname='Song3'")
+	cursor.execute(query3Change)
+	cursor.execute(queryDisplay)
+	result = cursor.fetchall()
+	print result
+elif userChange in ['4', 'Fourth', 'Song4', 'song4', 'four']:
+	query4Change = ("update playlists set sname=(select sname from songs ORDER BY RAND() LIMIT 1) where playlists.pname='Song4'")
+	cursor.execute(query4Change)
+	cursor.execute(queryDisplay)
+	result = cursor.fetchall()
+	print result
+elif userChange in ['5', 'Fifth', 'Song5', 'song5', 'five']:
+	query2Change = ("update playlists set sname=(select sname from songs ORDER BY RAND() LIMIT 1) where playlists.pname='Song5'")
+	cursor.execute(query2Change)
+	cursor.execute(queryDisplay)
+	result = cursor.fetchall()
+	print result
+elif userChange in ['skip']:
+	cursor.execute(queryDisplay)
+else:
+	userChange = raw_input("You did not enter a valid response. Please type the number of the song you want changed: ")
+
+if userDelete in ['1', 'First', 'Song1', 'song1', 'one']:
+	query1Delete = ("update playlists set sname=(NULL) where playlists.pname='Song1'")
+	cursor.execute(query1Change)
+	cursor.execute(queryDisplay)
+	result = cursor.fetchall()
+	print result
+	usersResponse = (raw_input("Is this playlist okay? "))
+elif userDelete in ['2', 'Second', 'Song2', 'Song2', 'two']:
+	query2Delete = ("update playlists set sname=(NULL) where playlists.pname='Song2'")
+	cursor.execute(query2Change)
+	cursor.execute(queryDisplay)
+	result = cursor.fetchall()
+	print result
+elif userDelete in ['3', 'Third', 'Song3', 'song3', 'three']:
+	query3Delete = ("update playlists set sname=(NULL) where playlists.pname='Song3'")
+	cursor.execute(query3Change)
+	cursor.execute(queryDisplay)
+	result = cursor.fetchall()
+	print result
+elif userDelete in ['4', 'Fourth', 'Song4', 'song4', 'four']:
+	query4Delete = ("update playlists set sname=(NULL) where playlists.pname='Song4'")
+	cursor.execute(query4Change)
+	cursor.execute(queryDisplay)
+	result = cursor.fetchall()
+	print result
+elif userDelete in ['5', 'Fifth', 'Song5', 'song5', 'five']:
+	query2Delete = ("update playlists set sname=(NULL) where playlists.pname='Song5'")
+	cursor.execute(query2Change)
+	cursor.execute(queryDisplay)
+	result = cursor.fetchall()
+	print result
+else:
+	userDelete = raw_input("You did not enter a valid response. Please type the number of the song you want changed: ")
+
+
+
+
+

@@ -1,0 +1,39 @@
+USE music_project;
+
+CREATE TABLE genre (
+  type VARCHAR(20) NOT NULL,
+  artistsname VARCHAR(100) NOT NULL,
+  PRIMARY KEY (type, artistsname)
+) engine = InnoDB;
+
+ALTER TABLE genre ADD FOREIGN KEY (artistsname) REFERENCES artistsAlbum(artistsname) ON UPDATE CASCADE;
+
+CREATE TABLE artistsAlbum (
+  artistsname VARCHAR(100) NOT NULL,
+  albumname VARCHAR(100) NOT NULL,
+  year INT NOT NULL,
+  type VARCHAR(20) NOT NULL,
+  PRIMARY KEY (artistsname, albumname)
+) engine=InnoDB;
+
+ALTER TABLE artistsAlbum 
+	ADD FOREIGN KEY (type) REFERENCES genre(type) ON UPDATE CASCADE;
+
+CREATE TABLE songs (
+  sname VARCHAR(100),
+  artistsname VARCHAR(100) NOT NULL,
+  runtime time NOT NULL,
+  PRIMARY KEY (sname)
+) engine=InnoDB;
+
+ALTER TABLE songs 
+	ADD FOREIGN KEY (artistsname) REFERENCES artistsAlbum(artistsname) ON UPDATE CASCADE;
+
+CREATE TABLE playlists (
+  pname VARCHAR(20) NOT NULL,
+  sname VARCHAR(100),
+  PRIMARY KEY (pname)
+) engine=InnoDB;
+
+ALTER TABLE playlists
+	ADD FOREIGN KEY (sname) REFERENCES songs(sname);

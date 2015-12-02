@@ -1,23 +1,34 @@
 USE music_project;
 
-CREATE TABLE genre (
-  type VARCHAR(20) NOT NULL,
-  artistsname VARCHAR(100) NOT NULL,
-  PRIMARY KEY (type, artistsname)
-) engine = InnoDB;
-
-ALTER TABLE genre ADD FOREIGN KEY (artistsname) REFERENCES artistsAlbum(artistsname) ON UPDATE CASCADE;
-
 CREATE TABLE artistsAlbum (
   artistsname VARCHAR(100) NOT NULL,
   albumname VARCHAR(100) NOT NULL,
-  year INT NOT NULL,
-  type VARCHAR(20) NOT NULL,
-  PRIMARY KEY (artistsname, albumname)
+  year INT NOT NULL
 ) engine=InnoDB;
 
-ALTER TABLE artistsAlbum 
-	ADD FOREIGN KEY (type) REFERENCES genre(type) ON UPDATE CASCADE;
+CREATE TABLE pop (
+  artistsname VARCHAR(100) NOT NULL REFERENCES artistsAlbum(artistsname),
+  albumname VARCHAR(100) NOT NULL REFERENCES artistsAlbum(albumname),
+  PRIMARY KEY(artistsname, albumname)
+) engine=InnoDB;
+
+CREATE TABLE electronic (
+  artistsname VARCHAR(100) NOT NULL REFERENCES artistsAlbum(artistsname),
+  albumname VARCHAR(100) NOT NULL REFERENCES artistsAlbum(albumname),
+  PRIMARY KEY(artistsname, albumname)
+) engine=InnoDB;
+
+CREATE TABLE country (
+  artistsname VARCHAR(100) NOT NULL REFERENCES artistsAlbum(artistsname),
+  albumname VARCHAR(100) NOT NULL REFERENCES artistsAlbum(albumname),
+  PRIMARY KEY(artistsname, albumname)
+) engine=InnoDB;
+
+CREATE TABLE hipHopRap (
+  artistsname VARCHAR(100) NOT NULL REFERENCES artistsAlbum(artistsname),
+  albumname VARCHAR(100) NOT NULL REFERENCES artistsAlbum(albumname),
+  PRIMARY KEY(artistsname, albumname)
+) engine=InnoDB;
 
 CREATE TABLE songs (
   sname VARCHAR(100),

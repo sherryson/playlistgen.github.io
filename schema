@@ -1,9 +1,11 @@
+CREATE SCHEMA music_project;
 USE music_project;
 
 CREATE TABLE artistsAlbum (
   artistsname VARCHAR(100) NOT NULL,
   albumname VARCHAR(100) NOT NULL,
-  year INT NOT NULL
+  year INT NOT NULL,
+  PRIMARY KEY(artistsname)
 ) engine=InnoDB;
 
 CREATE TABLE pop (
@@ -34,7 +36,7 @@ CREATE TABLE songs (
   sname VARCHAR(100),
   artistsname VARCHAR(100) NOT NULL,
   runtime time NOT NULL,
-  PRIMARY KEY (sname)
+  PRIMARY KEY (sname, artistsname)
 ) engine=InnoDB;
 
 ALTER TABLE songs 
@@ -48,3 +50,11 @@ CREATE TABLE playlists (
 
 ALTER TABLE playlists
 	ADD FOREIGN KEY (sname) REFERENCES songs(sname);
+
+select * from songs;
+select * from artistsAlbum;
+select * from pop;
+select * from electronic;
+select * from country;
+select * from hiphopRap;
+select * from playlists;

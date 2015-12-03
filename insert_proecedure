@@ -1,0 +1,12 @@
+DELIMITER //
+CREATE PROCEDURE requested_song_insert(IN userInsert VARCHAR(45))
+BEGIN
+	SELECT DISTINCT s.sname, 
+					s.artistsname, 
+					a.albumname
+					FROM songs s, artistsAlbum a
+					WHERE sname=userInsert 
+					AND s.artistsname=a.artistsname
+					GROUP BY s.sname, s.artistsname, a.albumname
+					ORDER BY sname;
+END// DELIMITER ;

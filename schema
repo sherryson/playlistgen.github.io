@@ -1,36 +1,23 @@
-CREATE SCHEMA music_project;
 USE music_project;
 
 CREATE TABLE artistsAlbum (
   artistsname VARCHAR(100) NOT NULL,
   albumname VARCHAR(100) NOT NULL,
   year INT NOT NULL,
-  PRIMARY KEY(artistsname)
-) engine=InnoDB;
-
-CREATE TABLE pop (
-  artistsname VARCHAR(100) NOT NULL REFERENCES artistsAlbum(artistsname),
-  albumname VARCHAR(100) NOT NULL REFERENCES artistsAlbum(albumname),
+  gid VARCHAR(20) NOT NULL,
   PRIMARY KEY(artistsname, albumname)
 ) engine=InnoDB;
 
-CREATE TABLE electronic (
-  artistsname VARCHAR(100) NOT NULL REFERENCES artistsAlbum(artistsname),
-  albumname VARCHAR(100) NOT NULL REFERENCES artistsAlbum(albumname),
-  PRIMARY KEY(artistsname, albumname)
+ALTER TABLE artistsAlbum 
+	ADD FOREIGN KEY (gid) REFERENCES genre(gid) ON UPDATE CASCADE;
+
+
+CREATE TABLE genre (
+  gid VARCHAR(20) NOT NULL,
+  type ENUM('Electronic', 'Pop', 'Hip Hop/Rap', 'Country') NOT NULL,
+  PRIMARY KEY(gid)
 ) engine=InnoDB;
 
-CREATE TABLE country (
-  artistsname VARCHAR(100) NOT NULL REFERENCES artistsAlbum(artistsname),
-  albumname VARCHAR(100) NOT NULL REFERENCES artistsAlbum(albumname),
-  PRIMARY KEY(artistsname, albumname)
-) engine=InnoDB;
-
-CREATE TABLE hipHopRap (
-  artistsname VARCHAR(100) NOT NULL REFERENCES artistsAlbum(artistsname),
-  albumname VARCHAR(100) NOT NULL REFERENCES artistsAlbum(albumname),
-  PRIMARY KEY(artistsname, albumname)
-) engine=InnoDB;
 
 CREATE TABLE songs (
   sname VARCHAR(100),
@@ -50,11 +37,3 @@ CREATE TABLE playlists (
 
 ALTER TABLE playlists
 	ADD FOREIGN KEY (sname) REFERENCES songs(sname);
-
-select * from songs;
-select * from artistsAlbum;
-select * from pop;
-select * from electronic;
-select * from country;
-select * from hiphopRap;
-select * from playlists;

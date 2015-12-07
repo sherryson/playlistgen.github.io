@@ -215,6 +215,7 @@ try:
 			song_query = tuple(song_query)
 			result = (result + song_query)
 			print result
+			usersResponse = (raw_input("Is this playlist okay? "))
 			response(usersResponse)
 	
 	# ensure this playlist is desired, call functions delete, replace and insert
